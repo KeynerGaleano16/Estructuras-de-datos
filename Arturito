@@ -1,0 +1,69 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package arturito;
+
+/**
+ *
+ * @author Kira
+ */
+
+
+  import java.util.Scanner;
+import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class  Arturito {
+    private static Stack<String> pilaTareas = new Stack<>();
+    private static boolean procesadorOcupado = false;
+    private static Timer timer = new Timer();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("¡Bienvenido al simulador de Robot Explorador!");
+
+        while (true) {
+            System.out.println("Por favor, ingrese una tarea (s para sensores, c para comunicaciones, q para salir):");
+            String tarea = scanner.nextLine().trim().toLowerCase();
+
+            if (tarea.equals("q")) {
+                break;
+            }
+
+            if (tarea.equals("s") || tarea.equals("c")) {
+                if (!procesadorOcupado) {
+                    ejecutarTarea(tarea);
+                } else {
+                    pilaTareas.push(tarea);
+                }
+            } else {
+                System.out.println("Tarea no válida. Por favor, ingrese s para sensores, c para comunicaciones, o q para salir.");
+            }
+        }
+
+        timer.cancel();
+        System.out.println("Programa finalizado.");
+    }
+
+    private static void ejecutarTarea(String tarea) {
+        procesadorOcupado = true;
+        System.out.println("Ejecutando tarea: " + tarea);
+
+        int tiempoDeEjecucion = tarea.equals("s") ? 3000 : 2000; // Tiempo de ejecución en milisegundos
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                procesadorOcupado = false;
+                System.out.println("Tarea completada: " + tarea);
+
+                if (!pilaTareas.isEmpty()) {
+                    String proximaTarea = pilaTareas.pop();
+                    ejecutarTarea(proximaTarea);
+                }
+            }
+        }, tiempoDeEjecucion);
+    }
+}
