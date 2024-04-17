@@ -1,0 +1,34 @@
+package estructuras.de.datos;
+import java.util.LinkedList;
+import java.util.Queue;
+
+
+class Documento {
+    String nombre;
+    int numPaginas;
+
+    public Documento(String nombre, int numPaginas) {
+        this.nombre=nombre;
+        this.numPaginas=numPaginas;
+    }
+}
+
+public class ImpresoraBase {
+    Queue<Documento> cola;
+
+    public ImpresoraBase() {
+        cola=new LinkedList<>();
+    }
+
+    public void agregarDocumento(Documento documento) {
+        cola.add(documento);
+    }
+
+    public Documento obtenerSiguienteDocumento() {
+        return cola.poll();
+    }
+
+    public boolean colaVacia() {
+        return cola.isEmpty();
+    }
+}
